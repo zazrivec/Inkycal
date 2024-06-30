@@ -200,7 +200,7 @@ class Agenda(inkycal_module):
 
                     # Check if event is all day, if not, add the time
                     if not parser.all_day(_):
-                        write(im_black, (x_time, line_pos[cursor][1]),
+                        write(im_colour, (x_time, line_pos[cursor][1]),
                               (time_width, line_height), time,
                               font=self.font, alignment='left')
 
