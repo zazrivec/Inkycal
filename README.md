@@ -1,24 +1,24 @@
 # Welcome to inkycal v2.0.3!
 
 <p align="center">
+    <a href="https://github.com/aceinnolab/Inkycal/actions/workflows/test-on-rpi.yml"><img src="https://github.com/aceinnolab/Inkycal/actions/workflows/test-on-rpi.yml/badge.svg"></a>
+    <a href="https://discord.gg/sHYKeSM"><img src="https://img.shields.io/discord/672082714190544899?style=flat&logo=discord&logoColor=blue&color=lightorange"></a>
+    <a href="https://github.com/aceinnolab/Inkycal/releases"><img alt="Version" src="https://img.shields.io/github/release/aceisace/Inkycal.svg"/></a>
+    <a href="https://github.com/aceinnolab/Inkycal/blob/main/LICENSE"><img alt="Licence" src="https://img.shields.io/github/license/aceisace/Inkycal.svg" /></a>
+    <a href="https://github.com/aceinnolab/Inkycal"><img alt="python" src="https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-lightorange"></a>
+    <a href="https://github.com/aceinnolab/Inkycal/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/aceisace/Inkycal?color=yellow"></a>
+</p>
+
+<p align="center">
         <img src="https://raw.githubusercontent.com/aceisace/Inkycal/assets/Repo/logo.png" width="900" alt="aceinnolab logo">
 </p>
 <p align="center">
         <img src="https://github.com/aceinnolab/Inkycal/blob/c1c274878ba81ddaee6186561e6ea892da54cd6a/Repo/inkycal-featured-gif.gif" width="900" alt="featured-image">
 </p>
 
-<p align="center">
-        <a href="https://github.com/aceinnolab/Inkycal/actions/workflows/test-on-rpi.yml"><img src="https://github.com/aceinnolab/Inkycal/actions/workflows/test-on-rpi.yml/badge.svg"></a>
-    <a href="https://github.com/aceinnolab/Inkycal/actions/workflows/update-docs.yml"><img src="https://github.com/aceinnolab/Inkycal/actions/workflows/update-docs.yml/badge.svg"></a>
-    <a href="https://github.com/aceinnolab/Inkycal/releases"><img alt="Version" src="https://img.shields.io/github/release/aceisace/Inkycal.svg"/></a>
-   <a href="https://github.com/aceinnolab/Inkycal/blob/main/LICENSE"><img alt="Licence" src="https://img.shields.io/github/license/aceisace/Inkycal.svg" /></a>
-   <a href="https://github.com/aceinnolab/Inkycal/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/aceisace/Inkycal?color=yellow"></a>
-   <a href="https://github.com/aceinnolab/Inkycal"><img alt="python" src="https://img.shields.io/badge/python-3.11-lightorange"></a>
-</p>
-
 Inkycal is a software written in python for selected E-Paper displays. It converts these displays into useful
 information dashboards. It's open-source, free for personal use, fully modular and user-friendly. Despite all this,
-Inkycal can run well even on the Raspberry Pi Zero. Oh, and it's open for third-party modules! Hooray!
+Inkycal can run well even on the Raspberry Pi Zero W. Oh, and it's open for third-party modules! Hooray!
 
 ## ⚠️ Warning: long installation time expected!
 
@@ -26,10 +26,11 @@ Starting october 2023, Raspberry Pi OS is now based on Debian bookworm and uses 
 default version. Inkycal has been updated to work with python3.11, but the installation of numpy can take a very long
 time, in some cases even hours. If you do not want to wait this long to install Inkycal, you can also get a
 ready-to-flash version of Inkycal called InkycalOS-Lite with everything pre-installed for you by sponsoring
-via [Github Sponsors](https://github.com/sponsors/aceisace). This helps keep up maintenance costs, implement new
+via [GitHub Sponsors](https://github.com/sponsors/aceisace). This helps keep up maintenance costs, implement new
 features and fixing bugs. Please choose the one-time sponsor option and select the one with the plug-and-play version of
 Inkycal. Then, send your email-address to which InkycalOS-Lite should be sent.
-Alternatively, you can also use the paypal.me link and send the same amount as Github sponsors to get access to InkycalOS-Lite!
+Alternatively, you can also use the paypal.me link and send the same amount as Github sponsors to get access to
+InkycalOS-Lite!
 
 ## Main features
 
@@ -55,7 +56,7 @@ Watch the one-minute video on getting started with Inkycal:
 ## Hardware guide
 
 Before you can start, please ensure you have one of the supported displays and of the supported Raspberry
-Pi: `|4|3A|3B|3B+|2B|0W|0WH|02W|`. We personally recommend the Raspberry Pi Zero W as this is relatively cheaper, uses
+Pi: `|4|3A|3B|3B+|2B|ZeroW|ZeroWH|Zero2W|`. We personally recommend the Raspberry Pi Zero W as this is relatively cheaper, uses
 less power and is perfect to fit in a small photo frame once you have assembled everything.
 
 **Serial** displays are usually cheaper, but slower. Their main advantage is ease of use, like being able to communicate
@@ -73,26 +74,26 @@ grayscale levels, which does not compare to the 256 grayscales of LCDs, but far 
 links below may or may not contain the required driver board. Please ensure you get the correct driver board for the
 display!**
 
-| type                                      | vendor                  | Where to buy                                                              |
-|-------------------------------------------|-------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 7.5" Inkycal (plug-and-play)              | Aceinnolab (author)       |  [Buy on Tindie](https://www.tindie.com/products/aceisace4444/inkycal-build-v1/)  Pre-configured version of Inkycal with custom frame and a web-ui. You do not need to buy anything extra. Includes Raspberry Pi Zero W, 7.5" e-paper, microSD card, driver board, custom packaging and 1m of cable. Comes pre-assembled for plug-and-play. |
-| Inkycal frame (kit -> requires wires, 7.5" Display and Zero W with microSD card | Aceinnolab (author)       |  [Buy on Tindie](https://www.tindie.com/products/aceinnolab/inkycal-frame-custom-driver-board-only/) Ultraslim frame with custom-made front and backcover inkl. ultraslim driver board). You will need a Raspberry Pi, microSD card and a 7.5" e-paper display |
-| `[serial]`  12.48" (1304×984px) display   | waveshare / gooddisplay |  Search for `Waveshare 12.48" E-Paper 1304×984` on amazon or similar |
-| `[serial]` 7.5" (640x384px) -> v1 display (2/3-colour) | waveshare / gooddisplay |  Search for `Waveshare 7.5" E-Paper 640x384` on amazon or similar |
-| `[serial]` 7.5" (800x480px) -> v2 display (2/3-colour) | waveshare / gooddisplay |  Search for `Waveshare 7.5" E-Paper 800x480` on amazon or similar |
-| `[serial]` 7.5" (880x528px) -> v3 display (2/3-colour) | waveshare / gooddisplay |  Search for `Waveshare 7.5" E-Paper 800x528` on amazon or similar |
-| `[serial]`  5.83" (400x300px) display     | waveshare / gooddisplay | Search for `Waveshare 5.83" E-Paper 400x300` on amazon or similar |
-| `[serial]`  4.2" (400x300px)display       | waveshare / gooddisplay | Search for `Waveshare 4.2" E-Paper 400x300` on amazon or similar |                                                                                         |
-| `[parallel]` 10.3" (1872×1404px) display  | waveshare / gooddisplay |  Search for `Waveshare 10.3" E-Paper 1872×1404` on amazon or similar |
-| `[parallel]` 9.7" (1200×825px) display    | waveshare / gooddisplay | Search for `Waveshare 9.7" E-Paper 1200×825` on amazon or similar |
-| `[parallel]` 7.8" (1872×1404px) display   | waveshare / gooddisplay |  Search for `Waveshare 7.8" E-Paper 1872×1404` on amazon or similar |
-| Raspberry Pi Zero W                       | Raspberry Pi            |  Search for `Raspberry Pi Zero W` on amazon or similar |
-| MicroSD card                              | Sandisk                 |  Search for `MicroSD card 8GB` on amazon or similar |
+| type                                                                            | vendor                  | Where to buy                                                                                                                                                                                                                                                                                                                                |
+|---------------------------------------------------------------------------------|-------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 7.5" Inkycal (plug-and-play)                                                    | Aceinnolab (author)     |  [Buy on Tindie](https://www.tindie.com/products/aceisace4444/inkycal-build-v1/)  Pre-configured version of Inkycal with custom frame and a web-ui. You do not need to buy anything extra. Includes Raspberry Pi Zero W, 7.5" e-paper, microSD card, driver board, custom packaging and 1m of cable. Comes pre-assembled for plug-and-play. |
+| Inkycal frame (kit -> requires wires, 7.5" Display and Zero W with microSD card | Aceinnolab (author)     | [Buy on Tindie](https://www.tindie.com/products/aceinnolab/inkycal-frame-custom-driver-board-only/) Ultraslim frame with custom-made front and backcover inkl. ultraslim driver board). You will need a Raspberry Pi, microSD card and a 7.5" e-paper display                                                                               |
+| Driver board                                                                    | Aceinnolab (author)     | [Buy on Tindie](https://www.tindie.com/products/aceinnolab/universal-e-paper-driver-board-for-24-pin-spi/) Ultraslim, 24-pin SPI driver board for many serial e-paper displays.                                                                                                                                                             |
+| `[serial]`  12.48" (1304×984px) display                                         | waveshare / gooddisplay |  Search for `Waveshare 12.48" E-Paper 1304×984` on amazon or similar                                                                                                                                                                                                                                                                        |
+| `[serial]` 7.5" (640x384px) -> v1 display (2/3-colour)                          | waveshare / gooddisplay | Search for `Waveshare 7.5" E-Paper 640x384` on amazon or similar                                                                                                                                                                                                                                                                            |
+| `[serial]` 7.5" (800x480px) -> v2 display (2/3-colour)                          | waveshare / gooddisplay | Search for `Waveshare 7.5" E-Paper 800x480` on amazon or similar                                                                                                                                                                                                                                                                            |
+| `[serial]` 7.5" (880x528px) -> v3 display (2/3-colour)                          | waveshare / gooddisplay | Search for `Waveshare 7.5" E-Paper 800x528` on amazon or similar                                                                                                                                                                                                                                                                            |
+| `[serial]`  5.83" (400x300px) display                                           | waveshare / gooddisplay | Search for `Waveshare 5.83" E-Paper 400x300` on amazon or similar                                                                                                                                                                                                                                                                           |
+| `[serial]`  4.2" (400x300px)display                                             | waveshare / gooddisplay | Search for `Waveshare 4.2" E-Paper 400x300` on amazon or similar                                                                                                                                                                                                                                                                            |                                                                                         |
+| `[parallel]` 10.3" (1872×1404px) display                                        | waveshare / gooddisplay |  Search for `Waveshare 10.3" E-Paper 1872×1404` on amazon or similar                                                                                                                                                                                                                                                                        |
+| `[parallel]` 9.7" (1200×825px) display                                          | waveshare / gooddisplay | Search for `Waveshare 9.7" E-Paper 1200×825` on amazon or similar                                                                                                                                                                                                                                                                           |
+| `[parallel]` 7.8" (1872×1404px) display                                         | waveshare / gooddisplay |  Search for `Waveshare 7.8" E-Paper 1872×1404` on amazon or similar                                                                                                                                                                                                                                                                         |
+| Raspberry Pi Zero W                                                             | Raspberry Pi            |  Search for `Raspberry Pi Zero W` on amazon or similar                                                                                                                                                                                                                                                                                      |
+| MicroSD card                                                                    | Sandisk                 |  Search for `MicroSD card 8GB` on amazon or similar                                                                                                                                                                                                                                                                                         |
 
 ## Configuring the Raspberry Pi
-
-Flash Raspberry Pi OS on your microSD card (min. 4GB) with [Raspberry Pi Imager](https://rptl.io/imager). Use the
-following settings:
+Flash Raspberry Pi OS on your microSD card (min. 4GB) with [Raspberry Pi Imager](https://rptl.io/imager).
+Use the following settings:
 
 | option                    |            value            |
 |:--------------------------|:---------------------------:|
@@ -120,7 +121,11 @@ following settings:
 
 ```bash
 sudo raspi-config --expand-rootfs
+
+sudo sed -i s/#dtparam=spi=on/dtparam=spi=on/ /boot/firmware/config.txt
+# note: on older releases, this file is located in /boot/config.txt. If you get an error saying file not found, run the command below:
 sudo sed -i s/#dtparam=spi=on/dtparam=spi=on/ /boot/config.txt
+
 sudo dpkg-reconfigure tzdata
 
 # If you have the 12.48" display, these steps are also required:
@@ -128,8 +133,6 @@ wget http://www.airspayce.com/mikem/bcm2835/bcm2835-1.71.tar.gz
 tar zxvf bcm2835-1.71.tar.gz 
 cd bcm2835-1.71/
 sudo ./configure && sudo make && sudo make check && sudo make install
-wget https://project-downloads.drogon.net/wiringpi-latest.deb
-sudo dpkg -i wiringpi-latest.deb
 
 # If you are using the Raspberry Pi Zero models, you may need to increase the swapfile size to be able to install Inkycal:
 sudo dphys-swapfile swapoff
@@ -156,18 +159,25 @@ to prepare a pre-configured image with the latest version of Inkycal for the Ras
 version of Inkycal, is fully tested and uses the Raspberry Pi OS Lite as it's base image. You only need to copy your
 settings.json file, we already took care of the rest, including auto-start at boot, enabling spi and installing all
 dependencies in advance. Pretty neat right? Check the [sponsor button](https://github.com/sponsors/aceisace) at the very
-top of the repo to get access to Inkycal-OS-Lite. Alternatively, you can also use the paypal.me link and send the same amount as Github sponsors to get access to InkycalOS-Lite! 
-This will help keep this project growing and cover the ongoing expenses too! Win-win for everyone! 🎊 
+top of the repo to get access to Inkycal-OS-Lite. Alternatively, you can also use the PayPal.me link and send the same
+amount as GitHub sponsors to get access to InkycalOS-Lite!
+This will help keep this project growing and cover the ongoing expenses too! Win-win for everyone! 🎊
 
 ### Manual installation
 
 Run the following steps to install Inkycal. Do **not** use sudo for this, except where explicitly specified.
 
 ```bash
-# the next line is for the Raspberry Pi only
-sudo apt-get install zlib1g libjpeg-dev libatlas-base-dev rustc libopenjp2-7 python3-dev scons libssl-dev python3-venv python3-pip git libfreetype6-dev wkhtmltopdf
+# Raspberry Pi specific section start
+sudo apt-get install git zlib1g libjpeg-dev libatlas-base-dev rustc libopenjp2-7 python-dev-is-python3 scons libssl-dev python3-venv python3-pip git libfreetype6-dev wkhtmltopdf libopenblas-base libopenblas-dev 
+git clone https://github.com/WiringPi/WiringPi
+cd WiringPi
+./build
+cd ..
+# Raspberry Pi specific section end
+
 cd $HOME
-git clone --branch main --single-branch https://github.com/aceinnolab/Inkycal
+git clone https://github.com/aceinnolab/Inkycal
 cd Inkycal
 python3 -m venv venv
 source venv/bin/activate
@@ -175,7 +185,8 @@ python -m pip install --upgrade pip
 pip install wheel
 pip install -e ./
 
-# If you are running on the Raspberry Pi, please install the following too to allow rendering on the display
+
+# only for Raspberry Pi:
 pip install RPi.GPIO==0.7.1 spidev==3.5 gpiozero==2.0
 ```
 
@@ -298,3 +309,8 @@ perks after confirming 💯
 * [schuemann.it](https://schuemann.it/2019/09/11/e-ink-calendar-with-a-raspberry-pi/)
 * [huernerfuerst.de](https://www.huenerfuerst.de/archives/e-ink-kalender-mit-einem-raspberry-pi-zero-teil-1-was-wird-benoetigt)
 * [canox.net](https://canox.net/2019/06/raspberry-pi-als-e-ink-kalender/)
+
+## Our Contributors
+
+<table><tr><td align="center"><a href="https://github.com/aceisace"><img alt="aceisace" src="https://avatars.githubusercontent.com/u/29558518?v=4" width="117" /><br />aceisace</a></td><td align="center"><a href="https://github.com/Atrejoe"><img alt="Atrejoe" src="https://avatars.githubusercontent.com/u/585091?v=4" width="117" /><br />Atrejoe</a></td><td align="center"><a href="https://github.com/actions-user"><img alt="actions-user" src="https://avatars.githubusercontent.com/u/65916846?v=4" width="117" /><br />actions-user</a></td><td align="center"><a href="https://github.com/emilyboda"><img alt="emilyboda" src="https://avatars.githubusercontent.com/u/9170143?v=4" width="117" /><br />emilyboda</a></td><td align="center"><a href="https://github.com/StevenSeifried"><img alt="StevenSeifried" src="https://avatars.githubusercontent.com/u/39765956?v=4" width="117" /><br />StevenSeifried</a></td><td align="center"><a href="https://github.com/mrbwburns"><img alt="mrbwburns" src="https://avatars.githubusercontent.com/u/66523867?v=4" width="117" /><br />mrbwburns</a></td></tr><tr><td align="center"><a href="https://github.com/apps/dependabot"><img alt="dependabot[bot]" src="https://avatars.githubusercontent.com/in/29110?v=4" width="117" /><br />dependabot[bot]</a></td><td align="center"><a href="https://github.com/LakesideMiners"><img alt="LakesideMiners" src="https://avatars.githubusercontent.com/u/23389169?v=4" width="117" /><br />LakesideMiners</a></td><td align="center"><a href="https://github.com/hjiang"><img alt="hjiang" src="https://avatars.githubusercontent.com/u/18527?v=4" width="117" /><br />hjiang</a></td><td align="center"><a href="https://github.com/ch3lmi"><img alt="ch3lmi" src="https://avatars.githubusercontent.com/u/19972012?v=4" width="117" /><br />ch3lmi</a></td><td align="center"><a href="https://github.com/mygrexit"><img alt="mygrexit" src="https://avatars.githubusercontent.com/u/33792951?v=4" width="117" /><br />mygrexit</a></td><td align="center"><a href="https://github.com/tobychui"><img alt="tobychui" src="https://avatars.githubusercontent.com/u/24617523?v=4" width="117" /><br />tobychui</a></td></tr><tr><td align="center"><a href="https://github.com/worstface"><img alt="worstface" src="https://avatars.githubusercontent.com/u/72295005?v=4" width="117" /><br />worstface</a></td><td align="center"><a href="https://github.com/sapostoluk"><img alt="sapostoluk" src="https://avatars.githubusercontent.com/u/7192139?v=4" width="117" /><br />sapostoluk</a></td><td align="center"><a href="https://github.com/freezingDaniel"><img alt="freezingDaniel" src="https://avatars.githubusercontent.com/u/82905307?v=4" width="117" /><br />freezingDaniel</a></td><td align="center"><a href="https://github.com/dealyllama"><img alt="dealyllama" src="https://avatars.githubusercontent.com/u/5891782?v=4" width="117" /><br />dealyllama</a></td><td align="center"><a href="https://github.com/rafaljanicki"><img alt="rafaljanicki" src="https://avatars.githubusercontent.com/u/7746477?v=4" width="117" /><br />rafaljanicki</a></td><td align="center"><a href="https://github.com/priv-kweihmann"><img alt="priv-kweihmann" src="https://avatars.githubusercontent.com/u/46938494?v=4" width="117" /><br />priv-kweihmann</a></td></tr><tr><td align="center"><a href="https://github.com/surak"><img alt="surak" src="https://avatars.githubusercontent.com/u/878399?v=4" width="117" /><br />surak</a></td><td align="center"><a href="https://github.com/AlessandroMandelli"><img alt="AlessandroMandelli" src="https://avatars.githubusercontent.com/u/65062723?v=4" width="117" /><br />AlessandroMandelli</a></td><td align="center"><a href="https://github.com/DavidCamre"><img alt="DavidCamre" src="https://avatars.githubusercontent.com/u/1098069?v=4" width="117" /><br />DavidCamre</a></td><td align="center"><a href="https://github.com/jordanschau"><img alt="jordanschau" src="https://avatars.githubusercontent.com/u/412028?v=4" width="117" /><br />jordanschau</a></td><td align="center"><a href="https://github.com/mshulman"><img alt="mshulman" src="https://avatars.githubusercontent.com/u/1484420?v=4" width="117" /><br />mshulman</a></td><td align="center"><a href="https://github.com/vitasam"><img alt="vitasam" src="https://avatars.githubusercontent.com/u/5597505?v=4" width="117" /><br />vitasam</a></td></tr></table>
+

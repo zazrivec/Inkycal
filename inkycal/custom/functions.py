@@ -3,39 +3,39 @@ Inkycal custom-functions for ease-of-use
 
 Copyright by aceinnolab
 """
+import json
 import logging
 import os
 import time
 import traceback
+from typing import Tuple
 
-import PIL
+import arrow
 import requests
-from PIL import ImageFont, ImageDraw, Image
+import tzlocal
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
 
-logs = logging.getLogger(__name__)
-logs.setLevel(level=logging.INFO)
+from inkycal.settings import Settings
 
-# Get the path to the Inkycal folder
-top_level = os.path.dirname(
-    os.path.abspath(os.path.dirname(__file__))).split('/inkycal')[0]
+logger = logging.getLogger(__name__)
 
-# Get path of 'fonts' and 'images' folders within Inkycal folder
-fonts_location = top_level + '/fonts/'
-image_folder = top_level + '/image_folder/'
+settings = Settings()
 
 # Get available fonts within fonts folder
 fonts = {}
 
-for path, dirs, files in os.walk(fonts_location):
+for path, dirs, files in os.walk(settings.FONT_PATH):
     for _ in files:
-        if _.endswith('.otf'):
-            name = _.split('.otf')[0]
+        if _.endswith(".otf"):
+            name = _.split(".otf")[0]
             fonts[name] = os.path.join(path, _)
 
-        if _.endswith('.ttf'):
-            name = _.split('.ttf')[0]
+        if _.endswith(".ttf"):
+            name = _.split(".ttf")[0]
             fonts[name] = os.path.join(path, _)
-
+logger.debug(f"Found fonts: {json.dumps(fonts, indent=4, sort_keys=True)}")
 available_fonts = [key for key, values in fonts.items()]
 
 
@@ -60,45 +60,47 @@ def get_fonts():
         print(fonts)
 
 
-def get_system_tz():
+def get_system_tz() -> str:
     """Gets the system-timezone
 
     Gets the timezone set by the system.
 
     Returns:
       - A timezone if a system timezone was found.
-      - None if no timezone was found.
+      - UTC if no timezone was found.
 
     The extracted timezone can be used to show the local time instead of UTC. e.g.
 
       >>> import arrow
       >>> print(arrow.now()) # returns non-timezone-aware time
-      >>> print(arrow.now(tz=get_system_tz()) # prints timezone aware time.
+      >>> print(arrow.now(tz=get_system_tz())) # prints timezone aware time.
     """
     try:
-        local_tz = time.tzname[1]
+        local_tz = tzlocal.get_localzone().key
+        logger.debug(f"Local system timezone is {local_tz}.")
     except:
-        print('System timezone could not be parsed!')
-        print('Please set timezone manually!. Setting timezone to None...')
-        local_tz = None
+        logger.error("System timezone could not be parsed!")
+        logger.error("Please set timezone manually!. Falling back to UTC...")
+        local_tz = "UTC"
+    logger.debug(f"The time is {arrow.now(tz=local_tz).format('YYYY-MM-DD HH:mm:ss ZZ')}.")
     return local_tz
 
 
 def auto_fontsize(font, max_height):
     """Scales a given font to 80% of max_height.
 
-      Gets the height of a font and scales it until 80% of the max_height
-      is filled.
+    Gets the height of a font and scales it until 80% of the max_height
+    is filled.
 
 
-      Args:
-          - font: A PIL Font object.
-          - max_height: An integer representing the height to adjust the font to
-            which the given font should be scaled to.
+    Args:
+        - font: A PIL Font object.
+        - max_height: An integer representing the height to adjust the font to
+          which the given font should be scaled to.
 
-      Returns:
-          A PIL font object with modified height.
-      """
+    Returns:
+        A PIL font object with modified height.
+    """
     text_bbox = font.getbbox("hg")
     text_height = text_bbox[3]
     fontsize = text_height
@@ -109,8 +111,8 @@ def auto_fontsize(font, max_height):
     return font
 
 
-def write(image, xy, box_size, text, font=None, **kwargs):
-    """Writes text on a image.
+def write(image: Image, xy: Tuple[int, int], box_size: Tuple[int, int], text: str, font=None, **kwargs):
+    """Writes text on an image.
 
     Writes given text at given position on the specified image.
 
@@ -129,26 +131,25 @@ def write(image, xy, box_size, text, font=None, **kwargs):
       - colour: black by default, do not change as it causes issues with rendering
         on e-Paper.
       - rotation: Rotate the text with the text-box by a given angle anti-clockwise.
-      - fill_width: Decimal representing a percentage e.g. 0.9 # 90%. Fill a
+      - fill_width: Decimal representing a percentage e.g. 0.9 # 90%. Fill
         maximum of 90% of the size of the full width of text-box.
-      - fill_height: Decimal representing a percentage e.g. 0.9 # 90%. Fill a
+      - fill_height: Decimal representing a percentage e.g. 0.9 # 90%. Fill
         maximum of 90% of the size of the full height of the text-box.
     """
-    allowed_kwargs = ['alignment', 'autofit', 'colour', 'rotation',
-                      'fill_width', 'fill_height']
+    allowed_kwargs = ["alignment", "autofit", "colour", "rotation", "fill_width", "fill_height"]
 
     # Validate kwargs
     for key, value in kwargs.items():
         if key not in allowed_kwargs:
-            print('{0} does not exist'.format(key))
+            print(f'{key} does not exist')
 
     # Set kwargs if given, it not, use defaults
-    alignment = kwargs['alignment'] if 'alignment' in kwargs else 'center'
-    autofit = kwargs['autofit'] if 'autofit' in kwargs else False
-    fill_width = kwargs['fill_width'] if 'fill_width' in kwargs else 1.0
-    fill_height = kwargs['fill_height'] if 'fill_height' in kwargs else 0.8
-    colour = kwargs['colour'] if 'colour' in kwargs else 'black'
-    rotation = kwargs['rotation'] if 'rotation' in kwargs else None
+    alignment = kwargs["alignment"] if "alignment" in kwargs else "center"
+    autofit = kwargs["autofit"] if "autofit" in kwargs else False
+    fill_width = kwargs["fill_width"] if "fill_width" in kwargs else 1.0
+    fill_height = kwargs["fill_height"] if "fill_height" in kwargs else 0.8
+    colour = kwargs["colour"] if "colour" in kwargs else "black"
+    rotation = kwargs["rotation"] if "rotation" in kwargs else None
 
     x, y = xy
     box_width, box_height = box_size
@@ -160,41 +161,41 @@ def write(image, xy, box_size, text, font=None, **kwargs):
         text_bbox = font.getbbox(text)
         text_width = text_bbox[2] - text_bbox[0]
         text_bbox_height = font.getbbox("hg")
-        text_height = text_bbox_height[3] - text_bbox_height[1]
+        text_height = abs(text_bbox_height[3])  # - abs(text_bbox_height[1])
 
-        while (text_width < int(box_width * fill_width) and
-               text_height < int(box_height * fill_height)):
+        while text_width < int(box_width * fill_width) and text_height < int(box_height * fill_height):
             size += 1
             font = ImageFont.truetype(font.path, size)
             text_bbox = font.getbbox(text)
             text_width = text_bbox[2] - text_bbox[0]
             text_bbox_height = font.getbbox("hg")
-            text_height = text_bbox_height[3] - text_bbox_height[1]
+            text_height = abs(text_bbox_height[3])  # - abs(text_bbox_height[1])
 
     text_bbox = font.getbbox(text)
     text_width = text_bbox[2] - text_bbox[0]
     text_bbox_height = font.getbbox("hg")
-    text_height = text_bbox_height[3] - text_bbox_height[1]
+    text_height = abs(text_bbox_height[3])  # - abs(text_bbox_height[1])
 
-    # Truncate text if text is too long so it can fit inside the box
+    # Truncate text if text is too long, so it can fit inside the box
     if (text_width, text_height) > (box_width, box_height):
-        logs.debug(('truncating {}'.format(text)))
+        logger.debug(("truncating {}".format(text)))
         while (text_width, text_height) > (box_width, box_height):
             text = text[0:-1]
             text_bbox = font.getbbox(text)
             text_width = text_bbox[2] - text_bbox[0]
             text_bbox_height = font.getbbox("hg")
-            text_height = text_bbox_height[3] - text_bbox_height[1]
-        logs.debug(text)
+            text_height = abs(text_bbox_height[3])  # - abs(text_bbox_height[1])
+        logger.debug(text)
 
     # Align text to desired position
     if alignment == "center" or None:
         x = int((box_width / 2) - (text_width / 2))
-    elif alignment == 'left':
+    elif alignment == "left":
         x = 0
-    elif alignment == 'right':
+    elif alignment == "right":
         x = int(box_width - text_width)
 
+    # Vertical centering
     y = int((box_height / 2) - (text_height / 2))
 
     # Draw the text in the text-box
@@ -206,7 +207,7 @@ def write(image, xy, box_size, text, font=None, **kwargs):
     # red text-box with white text (debugging purposes)
 
     # space = Image.new('RGBA', (box_width, box_height), color= 'red')
-    # ImageDraw.Draw(space).text((x, y), text, fill='white', font=font)
+    # ImageDraw.Draw(space).text((x, 0), text, fill='white', font=font, anchor="la")
 
     if rotation:
         space.rotate(rotation, expand=True)
@@ -215,7 +216,7 @@ def write(image, xy, box_size, text, font=None, **kwargs):
     image.paste(space, xy, space)
 
 
-def text_wrap(text, font=None, max_width=None):
+def text_wrap(text: str, font=None, max_width=None):
     """Splits a very long text into smaller parts
 
     Splits a long text to smaller lines which can fit in a line with max_width.
@@ -237,10 +238,10 @@ def text_wrap(text, font=None, max_width=None):
     if text_width < max_width:
         lines.append(text)
     else:
-        words = text.split(' ')
+        words = text.split(" ")
         i = 0
         while i < len(words):
-            line = ''
+            line = ""
             while i < len(words) and font.getlength(line + words[i]) <= max_width:
                 line = line + words[i] + " "
                 i += 1
@@ -251,7 +252,7 @@ def text_wrap(text, font=None, max_width=None):
     return lines
 
 
-def internet_available():
+def internet_available() -> bool:
     """checks if the internet is available.
 
     Attempts to connect to google.com with a timeout of 5 seconds to check
@@ -268,7 +269,7 @@ def internet_available():
     """
     for attempt in range(3):
         try:
-            requests.get('https://google.com', timeout=5)
+            requests.get("https://google.com", timeout=5)
             return True
         except:
             print(f"Network could not be reached: {traceback.print_exc()}")
@@ -276,15 +277,16 @@ def internet_available():
     return False
 
 
-def draw_border(image, xy, size, radius=5, thickness=1, shrinkage=(0.1, 0.1)):
+def draw_border(image: Image, xy: Tuple[int, int], size: Tuple[int, int], radius: int = 5, thickness: int = 1,
+                shrinkage: Tuple[int, int] = (0.1, 0.1)) -> None:
     """Draws a border at given coordinates.
 
     Args:
       - image: The image on which the border should be drawn (usually im_black or
-        im_colour.
+        im_colour).
 
       - xy: Tuple representing the top-left corner of the border e.g. (32, 100)
-        where 32 is the x co-ordinate and 100 is the y-coordinate.
+        where 32 is the x-coordinate and 100 is the y-coordinate.
 
       - size: Size of the border as a tuple -> (width, height).
 
@@ -298,7 +300,7 @@ def draw_border(image, xy, size, radius=5, thickness=1, shrinkage=(0.1, 0.1)):
         border by 20%
     """
 
-    colour = 'black'
+    colour = "black"
 
     # size from function parameter
     width, height = int(size[0] * (1 - shrinkage[0])), int(size[1] * (1 - shrinkage[1]))
@@ -322,6 +324,7 @@ def draw_border(image, xy, size, radius=5, thickness=1, shrinkage=(0.1, 0.1)):
         c5, c6 = ((x + width) - diameter, (y + height) - diameter), (x + width, y + height)
         c7, c8 = (x, (y + height) - diameter), (x + diameter, y + height)
 
+
     # Draw lines and arcs, creating a square with round corners
     draw = ImageDraw.Draw(image)
     draw.line((p1, p2), fill=colour, width=thickness)
@@ -336,7 +339,7 @@ def draw_border(image, xy, size, radius=5, thickness=1, shrinkage=(0.1, 0.1)):
         draw.arc((c7, c8), 90, 180, fill=colour, width=thickness)
 
 
-def draw_border_2(im: PIL.Image, xy: tuple, size: tuple, radius: int):
+def draw_border_2(im: Image, xy: Tuple[int, int], size: Tuple[int, int], radius: int):
     draw = ImageDraw.Draw(im)
 
     x, y = xy
