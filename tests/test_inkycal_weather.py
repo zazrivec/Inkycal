@@ -8,7 +8,6 @@ from inkycal.modules import Weather
 from inkycal.modules.inky_image import Inkyimage
 from tests import Config
 
-preview = Inkyimage.preview
 merge = Inkyimage.merge
 
 owm_api_key = Config.OPENWEATHERMAP_API_KEY
@@ -30,7 +29,7 @@ tests = [
             "forecast_interval": "daily",
             "units": "metric",
             "hour_format": "12",
-            "use_beaufort": True,
+            "use_beaufort": False,
             "padding_x": 10,
             "padding_y": 10,
             "fontsize": 12,

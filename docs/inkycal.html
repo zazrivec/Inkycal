@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -5,19 +7,15 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Inkycal &mdash; inkycal 2.0.4 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=adc66a14"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=adc66a14"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
@@ -87,7 +85,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#inkycal.modules.inky_image.Inkyimage.flip"><code class="docutils literal notranslate"><span class="pre">Inkyimage.flip()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#inkycal.modules.inky_image.Inkyimage.load"><code class="docutils literal notranslate"><span class="pre">Inkyimage.load()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#inkycal.modules.inky_image.Inkyimage.merge"><code class="docutils literal notranslate"><span class="pre">Inkyimage.merge()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#inkycal.modules.inky_image.Inkyimage.preview"><code class="docutils literal notranslate"><span class="pre">Inkyimage.preview()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#inkycal.modules.inky_image.Inkyimage.remove_alpha"><code class="docutils literal notranslate"><span class="pre">Inkyimage.remove_alpha()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#inkycal.modules.inky_image.Inkyimage.resize"><code class="docutils literal notranslate"><span class="pre">Inkyimage.resize()</span></code></a></li>
 </ul>
@@ -295,7 +292,7 @@ printed fonts of this function:</p>
 </dd>
 </dl>
 <p>The extracted timezone can be used to show the local time instead of UTC. e.g.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">arrow</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">arrow</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">arrow</span><span class="o">.</span><span class="n">now</span><span class="p">())</span> <span class="c1"># returns non-timezone-aware time</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">arrow</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">get_system_tz</span><span class="p">()))</span> <span class="c1"># prints timezone aware time.</span>
 </pre></div>
@@ -525,12 +522,6 @@ the first image on the second one.</p>
 </ul>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="inkycal.modules.inky_image.Inkyimage.preview">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">preview</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inkycal.modules.inky_image.Inkyimage.preview" title="Link to this definition"></a></dt>
-<dd><p>Previews an image on gpicview (only works on Rapsbian with Desktop).</p>
 </dd></dl>
 
 <dl class="py method">

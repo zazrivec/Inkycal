@@ -24,7 +24,8 @@ jobs:
           TINDIE_USERNAME: ${{ secrets.TINDIE_USERNAME }}
         with:
           # Set the base_image to the desired Raspberry Pi OS version
-          base_image: https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2024-03-15/2024-03-15-raspios-bookworm-armhf-lite.img.xz
+          # note: version 2023-12-11 onwards seems to have issues with the kernel and gpio. Using later versions requires some additional steps
+          base_image: https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2024-11-19/2024-11-19-raspios-bookworm-armhf-lite.img.xz
           image_additional_mb: 3072 # enlarge free space to 3 GB
           optimize_image: true
           commands: |
@@ -36,11 +37,12 @@ jobs:
             # get kernel info
             uname -srm
             cd /home/inky
+            sudo apt update
             sudo apt-get update -y
             # sudo apt-get dist-upgrade -y
             
             sudo apt-get install -y python3-pip
-            sudo apt-get install git zlib1g libjpeg-dev libatlas-base-dev rustc libopenjp2-7 python3-dev scons libssl-dev python3-venv python3-pip git libfreetype6-dev wkhtmltopdf libopenblas-base libopenblas-dev libxml2-dev libxslt-dev python-dev-is-python3 -y
+            sudo apt-get install git zlib1g libjpeg-dev libatlas-base-dev rustc libopenjp2-7 python3-dev scons libssl-dev python3-venv python3-pip git libfreetype6-dev wkhtmltopdf libopenblas-dev libxml2-dev libxslt-dev python-dev-is-python3 -y
             # #334 & #335
             git clone https://github.com/WiringPi/WiringPi
             cd WiringPi
@@ -55,7 +57,31 @@ jobs:
             python -m pip install --upgrade pip
             pip install wheel
             pip install -e ./
-            pip install RPi.GPIO==0.7.1 spidev==3.5 gpiozero==2.0
+            pip install spidev==3.5 gpiozero==2.0
+            
+            # specific hacks to get this running on newer kernels, see #387. Special thanks to pbarthelemy
+            wget  https://github.com/aceinnolab/Inkycal/raw/refs/heads/assets/hosting/pcre2-10.44.tar.bz2
+            bzip2 -d pcre2-10.44.tar.bz2
+            tar -xf pcre2-10.44.tar
+            cd pcre2-10.44/
+            ./configure && make && sudo make install && make clean
+            cd ..
+
+            wget https://github.com/aceinnolab/Inkycal/raw/refs/heads/assets/hosting/swig-4.3.0.tar
+            tar -xf swig-4.3.0.tar
+            cd swig-4.3.0/
+            ./configure && make && sudo make install && make clean
+            cd ..
+
+            wget https://github.com/aceinnolab/Inkycal/raw/refs/heads/assets/hosting/lg.zip
+            unzip lg.zip
+            cd lg
+            make && sudo make install && make clean
+            cd ..
+
+            pip install rpi-lgpio
+            # hacks section end
+
             wget https://raw.githubusercontent.com/aceinnolab/Inkycal/assets/tests/settings.json
             pip install pytest
             python -m pytest
@@ -69,10 +95,11 @@ jobs:
             echo $CWD
 
             # increase swap-size
-            sudo dphys-swapfile swapoff
-            sudo sed -i -E '/^CONF_SWAPSIZE=/s/=.*/=512/' /etc/dphys-swapfile
-            sudo dphys-swapfile setup
-            sudo dphys-swapfile swapon
+            # temporarily disabled due to unmounting issues
+            # sudo dphys-swapfile swapoff
+            # sudo sed -i -E '/^CONF_SWAPSIZE=/s/=.*/=512/' /etc/dphys-swapfile
+            # sudo dphys-swapfile setup
+            # sudo dphys-swapfile swapon
 
             # enable SPI
             sudo sed -i s/#dtparam=spi=on/dtparam=spi=on/ /boot/config.txt
@@ -85,7 +112,8 @@ jobs:
             sudo chown -R inky:inky /home/inky/Inkycal
 
             # make all users require a password for sudo commands (improves security)
-            echo 'ALL   ALL=(ALL:ALL) PASSWD: ALL' | sudo tee -a /etc/sudoers.d/010_require_sudo_password
+            # temporarily disabled to allow pisugar support
+            # echo 'ALL   ALL=(ALL:ALL) PASSWD: ALL' | sudo tee -a /etc/sudoers.d/010_require_sudo_password
             # allow some time to unmount
             sleep 10
 

@@ -6,6 +6,7 @@ Copyright by aceinnolab
 import asyncio
 import glob
 import hashlib
+import os.path
 
 import numpy
 
@@ -72,13 +73,16 @@ class Inkycal:
                     f"No settings.json file could be found in the specified location: {settings_path}")
 
         else:
-            logger.info("Looking for settings.json file in /boot folder...")
-            try:
-                with open('/boot/settings.json', mode="r") as settings_file:
-                    self.settings = json.load(settings_file)
-
-            except FileNotFoundError:
-                raise SettingsFileNotFoundError
+            found = False
+            for location in settings.SETTINGS_JSON_PATHS:
+                if os.path.exists(location):
+                    logger.info(f"Found settings.json file in {location}")
+                    with open(location, mode="r") as settings_file:
+                        self.settings = json.load(settings_file)
+                    found = True
+                    break
+            if not found:
+                raise SettingsFileNotFoundError(f"No settings.json file could be found in {settings.SETTINGS_JSON_PATHS} and no explicit path was specified.")
 
         self.disable_calibration = self.settings.get('disable_calibration', False)
         if self.disable_calibration:
@@ -137,11 +141,8 @@ class Inkycal:
             except:
                 logger.exception(f"Exception: {traceback.format_exc()}.")
 
-        # Path to store images
-        self.image_folder = settings.IMAGE_FOLDER
-
         # Remove old hashes
-        self._remove_hashes(self.image_folder)
+        self._remove_hashes(settings.IMAGE_FOLDER)
 
         # set up cache
         if not os.path.exists(os.path.join(settings.CACHE_PATH, CACHE_NAME)):
@@ -162,7 +163,12 @@ class Inkycal:
             self.pisugar = PiSugar()
 
             self.battery_capacity = self.pisugar.get_battery()
-            logger.info(f"PiSugar battery capacity: {self.battery_capacity}%")
+
+            if not self.battery_capacity:
+                logger.warning("[PISUGAR] Could not get battery capacity! Is the board off? Setting battery capacity to 0%")
+                self.battery_capacity = 100
+            else:
+                logger.info(f"PiSugar battery capacity: {self.battery_capacity}%")
 
             if self.battery_capacity < 20:
                 logger.warning("Battery capacity is below 20%!")
@@ -339,8 +345,12 @@ class Inkycal:
                 logger.info("All images generated successfully!")
             del errors
 
-            if self.battery_capacity < 20:
-                self.info += "Low battery!  "
+            if self.use_pi_sugar:
+                self.battery_capacity = self.pisugar.get_battery() or 0
+                if self.battery_capacity < 20:
+                    self.info += f"Low battery! ({self.battery_capacity})% "
+                else:
+                    self.info += f"Battery: {self.battery_capacity}% "
 
             # Assemble image from each module - add info section if specified
             self._assemble()
@@ -352,11 +362,11 @@ class Inkycal:
                 self._calibration_check()
                 if self._calibration_state:
                     # After calibration, we have to forcefully rewrite the screen
-                    self._remove_hashes(self.image_folder)
+                    self._remove_hashes(settings.IMAGE_FOLDER)
 
                 if self.supports_colour:
-                    im_black = Image.open(f"{self.image_folder}canvas.png")
-                    im_colour = Image.open(f"{self.image_folder}canvas_colour.png")
+                    im_black = Image.open(os.path.join(settings.IMAGE_FOLDER, "canvas.png"))
+                    im_colour = Image.open(os.path.join(settings.IMAGE_FOLDER, "canvas_colour.png"))
 
                     # Flip the image by 180° if required
                     if self.settings['orientation'] == 180:
@@ -365,8 +375,8 @@ class Inkycal:
 
                     # Render the image on the display
                     if not self.settings.get('image_hash', False) or self._needs_image_update([
-                        (f"{self.image_folder}/canvas.png.hash", im_black),
-                        (f"{self.image_folder}/canvas_colour.png.hash", im_colour)
+                        (f"{settings.IMAGE_FOLDER}/canvas.png.hash", im_black),
+                        (f"{settings.IMAGE_FOLDER}/canvas_colour.png.hash", im_colour)
                     ]):
                         display.render(im_black, im_colour)
 
@@ -379,10 +389,10 @@ class Inkycal:
                         im_black = upside_down(im_black)
 
                     if not self.settings.get('image_hash', False) or self._needs_image_update([
-                        (f"{self.image_folder}/canvas.png.hash", im_black), ]):
+                        (f"{settings.IMAGE_FOLDER}/canvas.png.hash", im_black), ]):
                         display.render(im_black)
 
-            logger.info(f'\nNo errors since {self.counter} display updates')
+            logger.info(f'No errors since {self.counter} display updates')
             logger.info(f'program started {runtime.humanize()}')
 
             # store the cache data
@@ -415,8 +425,8 @@ class Inkycal:
         returns the merged image
         """
 
-        im1_path = os.path.join(settings.image_folder, "canvas.png")
-        im2_path = os.path.join(settings.image_folder, "canvas_colour.png")
+        im1_path = os.path.join(settings.IMAGE_FOLDER, "canvas.png")
+        im2_path = os.path.join(settings.IMAGE_FOLDER, "canvas_colour.png")
 
         # If there is an image for black and colour, merge them
         if os.path.exists(im1_path) and os.path.exists(im2_path):
@@ -454,8 +464,8 @@ class Inkycal:
         for number in range(1, self._module_number):
 
             # get the path of the current module's generated images
-            im1_path = f"{self.image_folder}module{number}_black.png"
-            im2_path = f"{self.image_folder}module{number}_colour.png"
+            im1_path = os.path.join(settings.IMAGE_FOLDER, f"module{number}_black.png")
+            im2_path = os.path.join(settings.IMAGE_FOLDER, f"module{number}_colour.png")
 
             # Check if there is an image for the black band
             if os.path.exists(im1_path):
@@ -525,8 +535,8 @@ class Inkycal:
             im_black = self._optimize_im(im_black)
             im_colour = self._optimize_im(im_colour)
 
-        im_black.save(self.image_folder + 'canvas.png', 'PNG')
-        im_colour.save(self.image_folder + 'canvas_colour.png', 'PNG')
+        im_black.save(os.path.join(settings.IMAGE_FOLDER, "canvas.png"), "PNG")
+        im_colour.save(os.path.join(settings.IMAGE_FOLDER, "canvas_colour.png"), 'PNG')
 
         # Additionally, combine the two images with color
         def clear_white(img):
@@ -614,8 +624,8 @@ class Inkycal:
             black, colour = module.generate_image()
             if self.show_border:
                 draw_border_2(im=black, xy=(1, 1), size=(black.width - 2, black.height - 2), radius=5)
-            black.save(f"{self.image_folder}module{number}_black.png", "PNG")
-            colour.save(f"{self.image_folder}module{number}_colour.png", "PNG")
+            black.save(os.path.join(settings.IMAGE_FOLDER, f"module{number}_black.png"), "PNG")
+            colour.save(os.path.join(settings.IMAGE_FOLDER, f"module{number}_colour.png"), "PNG")
             return True
         except Exception:
             logger.exception(f"Error in module {number}!")
